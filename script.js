@@ -190,69 +190,6 @@ const botClick = function(index){
     }
 }
 
-// const sudoCheckWin = function(board,turn){
-//     const winConditionsArray = winningConditions[currentBoard];
-//     for (let condition in winConditionsArray){
-//         const requiredConditions = winConditionsArray[condition].length
-//         let playerLeftPanel = 0;
-//         let playerRightPanel =0;
- 
-//         for (let numbers of winConditionsArray[condition]){
-//             for (let i =1; i<=storeCells.length;i++){
-//                 if(i === numbers && storeCells[i-1]=="X"){
-//                     playerLeftPanel++
-
-//                 } else if (i === numbers && storeCells[i-1]=="O"){
-//                     playerRightPanel++
-
-//                 }
-//             }
-//         }
-//         if (playerLeftPanel==requiredConditions){
-//             return true
-//         } else if (playerRightPanel==requiredConditions){
-//             return false;
-//         }
-//     }
-// }
-
-// const minimax = function(board, turn) {
-//     // get emply cell
-//     let moves = [];
-//     for (let cell of board){
-//         if(!cell.innerHTML==""){
-//             moves.push(cell.cellIndex);
-//         }
-//     }
-
-//     // check index score and fill-in
-//     let score = [];
-
-
-
-//     // check best move index
-//     let bestIndex = 0;
-//     if(turn%2 == 0){
-//         let  bestScore = -10000;
-//         for (let i =0; i<moves.length;i++){
-//             if(score[i] > bestScore){
-//                 bestScore = score[i];
-//                 bestIndex = moves[i];
-//             }
-//         }
-//     } else {
-//         let bestScore = 10000;
-//         for (let i =0; i<moves.length;i++){
-//             if(score[i] < bestScore){
-//                 bestScore = score[i];
-//                 bestIndex = moves[i];
-//             }
-//         }
-//     }
-
-//     return bestIndex
-// }
-
 // change the turn
 const playerTurn = function(){
     if (currentPlayer == "X"){
@@ -358,24 +295,16 @@ const restartGame = function(){
 // connect 4 fill-in
 
 const connect4Fill = function(index){
-    let cellToChoose;
     let winConditionsInserts = winningConditions[currentBoard].insert;
     console.log(winConditionsInserts)
     for (let insert of winConditionsInserts){
-        // console.log(insert);
-        // console.log(index+1);
-        // console.log(insert.includes(index+1));
         if(insert.includes(index+1)){
             for(let i=insert.length-1;i>=0;i--){
                 let cells  = document.querySelectorAll(".cell");
                 for (let cell of cells){
                     let cellIndex = cell.getAttribute("cellIndex");
-                    // console.log(cellIndex)
-                    // console.log(storeCells[cellIndex])
-                    // console.log(insert[i]-1)
                     if (cellIndex == (insert[i]-1) && storeCells[cellIndex] == ""){
                         cellToChoose = cell;
-                        console.log(cell);
                         return dataToCell(cell, (insert[i]-1));
                     }
                 }
