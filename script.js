@@ -174,7 +174,6 @@ const botTurn = function(){
             i++
         }
     }
-    console.log(moves)
     let move = moves[Math.floor(Math.random()*moves.length)];
     return move;
 }

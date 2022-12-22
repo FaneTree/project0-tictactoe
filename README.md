@@ -1,13 +1,29 @@
-# TicTacToe
-**The project : Abaris’s Toe**
+# TicTacToe : Abaris’s Toe
+## **The project**
 
-Wizard theme in pixel art as Tic Tac Toe game with 4 elements including fire (red wizard), wind 
+Elemental theme as Tic Tac Toe game with 4 elements including fire, wind, water, and earth.
 
-(green wizard), water (blue wizard), and earth (brown wizard)
+**Main features**
+1. feature to change board size from 3x3 to 5x5 and also connect 4 game.
+2. bot feature using random method.
+3. feature to change background as per matching element.
+4. feature to change element together with token representing X and O.
+
+**Challenges**
+1. the design change during the creation process.
+2. cannot think about main code during design.
+3. referencing cells inside the board when recreated whole board after have changed board size.
+4. adding connect 4 loop to fill in correct cell and index from below to top.
+5. reference image in js to adjust in css in a differnt file reference layer.
+
+**Features to implement in the future**
+1. add minimax into bot logic.
+2. add hover to show token before click.
+3. transition for connect 4 to make token drop from top to the position.
 
 ---
 
-**Plan by steps**
+**Plan by steps in first version**
 
 1. **html elements for 3x3 as skeleton**
 2. **Add basic css for 3x3**
