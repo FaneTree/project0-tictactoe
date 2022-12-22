@@ -4,6 +4,7 @@ const winningMessage = document.querySelector(".winningMessage");
 const restartBtn = document.querySelectorAll("#reset");
 const buttonsClick = document.querySelectorAll(".button");
 const board = document.querySelector(".board")
+const connect4icon = document.querySelector("#connect")
 
 const winningConditions = {
     "3x3": {
@@ -522,6 +523,42 @@ const botdeactivate = function(){
     }
 }
 
+// grid add/reduce/connect4 button
+
+const gridConnect4 = function(){
+    if(turnCount==0){
+        currentBoard = "Connect4";
+        connect4icon.src = "images/icons/connect4status.png";
+        lineSize = 5;
+        gridCheck();
+    }
+}
+const gridAdd = function(){
+    if(turnCount==0){
+        connect4icon.src = "images/icons/connect4.png";
+        if(lineSize<5){
+            lineSize++
+            gridCheck();
+        }
+    }
+}
+const gridReduce = function(){
+    if(turnCount==0){
+        connect4icon.src = "images/icons/connect4.png";
+        if(lineSize>3){
+            lineSize--;
+            gridCheck();
+        }
+    }
+}
+
+// add sound to every buttons
+const buttonSound = function(){
+    if(soundPlay){
+        buttonsound.play()
+    }
+}
+
 const gridCheck = function(){
     // clear div inside board and change storeCells size
     board.innerHTML = "";
@@ -563,39 +600,6 @@ const gridCheck = function(){
         board.style.gridTemplateColumns = "repeat(5, auto)"
     } else {
         board.style.gridTemplateColumns = "repeat(5, auto)" // Connect4
-    }
-}
-
-// grid add/reduce/connect4
-
-const gridConnect4 = function(){
-    if(turnCount==0){
-        currentBoard = "Connect4";
-        lineSize = 5;
-        gridCheck();
-    }
-}
-const gridAdd = function(){
-    if(turnCount==0){
-        if(lineSize<5){
-            lineSize++
-            gridCheck();
-        }
-    }
-}
-const gridReduce = function(){
-    if(turnCount==0){
-        if(lineSize>3){
-            lineSize--;
-            gridCheck();
-        }
-    }
-}
-
-// add sound to every buttons
-const buttonSound = function(){
-    if(soundPlay){
-        buttonsound.play()
     }
 }
 
