@@ -65,7 +65,7 @@
 
             <span class='hidden overlay game-over-area' style = "opacity:1;">
                 <div class='hidden winningMessage'></div>
-                <button class='button game-over-restart'><img id="reset" src="images/icons/restart.png" alt="restart"></button>
+                <button class='button game-over-restart'><img id="reset" src="images/icons/continue.png" alt="restart"></button>
             </span>
         </main>
 
@@ -75,13 +75,17 @@
                 <button class = 'button connect' onclick=""><img id="connect" src="images/icons/connect4.png" alt="Connect4"></button>
                 <button class = 'button reduce' onclick=""><img id="reduce" src="images/icons/reduce.png" alt="ReduceGrid"></button>
                 <button class = 'button add' onclick=""><img id="add" src="images/icons/add.png" alt="AddGrid"></button>
+                
                 <div class='setgameplay' id="setting">Gameplay</div>
             </span>
             <span class="option">
+                <button class = 'button bots' onclick="botactivate()"><img id="bots" src="images/icons/activatebot.png" alt="changeBots"></button>
                 <button class = 'button sound-on' onclick="soundOn()"><img id="on" src="images/icons/soundon.png" alt="sound on"></button>
                 <button class = 'button sound-off' onclick="soundOff()"><img id="off" src="images/icons/soundoff.png" alt="sound off"></button>
+                <div class='setBots' id="setting">Bot</div>
                 <div class ='sound' id="setting">Sound</div>
             </span>
+
             
         </main>
 

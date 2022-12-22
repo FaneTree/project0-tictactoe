@@ -4,10 +4,6 @@ const winningMessage = document.querySelector(".winningMessage");
 const restartBtn = document.querySelectorAll("#reset");
 const buttonsClick = document.querySelectorAll(".button");
 
-// console.log(cells);
-// console.log(winningMessage);
-// console.log(restartBtn);
-
 const winningConditions = {
     "3x3": {
         row1: [1, 2, 3],
@@ -92,7 +88,6 @@ const mage2token = document.querySelector('.mage2token');
 const mage1name = document.querySelector('.Player1');
 const mage2name = document.querySelector('.Player2');
 const scoreUpdate = document.querySelector('.update');
-// console.log(scoreUpdate.innerHTML)
 const elements = ['Fire','Wind','Water','Earth']
 const backgroundIndex = [
     [1,2], // fireWind
@@ -139,9 +134,12 @@ let player2Score = 0;
 let character1Element = elements[2];
 let character2Element = elements[3];
 let currentPlayerElement = character1Element;
-
 let characterLeft = 3;
 let characterRight = 4;
+let moves = [];
+
+// define bot
+let activateBot = false;
 
 // define audio files
 let soundPlay = true;
@@ -152,18 +150,98 @@ const buttonsound = new Audio('http://commondatastorage.googleapis.com/codeskulp
 
 // state functions
 
-const dataToCell = function(cell,index){
-    storeCells[index] = currentPlayer;
-    if(currentPlayer == "X"){
-        cell.appendChild(mage1token.cloneNode(true));
-    } else if (currentPlayer = "O"){
-        cell.appendChild(mage2token.cloneNode(true));
-    }
-    if(soundPlay){
-        cellsound.play()
-    }
-};
+// bot functions
 
+// bot random move
+
+const botTurn = function(){
+    // get emply cell
+    moves = [];
+    let i = 0;
+    for (let cell of cells){
+        if(cell.innerHTML==""){
+            moves[i] = cell.getAttribute("cellIndex");
+            i++
+        }
+    }
+    let move = moves[Math.floor(Math.random()*moves.length)];
+    return move;
+}
+
+const botClick = function(index){
+    // bot to make its turn
+    for (let cell of cells){
+        if(index == cell.getAttribute("cellIndex")){
+            setTimeout(function(){cell.click()},400);
+            break;
+        }
+    }
+}
+
+// const sudoCheckWin = function(board,turn){
+//     const winConditionsArray = winningConditions[currentBoard];
+//     for (let condition in winConditionsArray){
+//         const requiredConditions = winConditionsArray[condition].length
+//         let playerLeftPanel = 0;
+//         let playerRightPanel =0;
+ 
+//         for (let numbers of winConditionsArray[condition]){
+//             for (let i =1; i<=storeCells.length;i++){
+//                 if(i === numbers && storeCells[i-1]=="X"){
+//                     playerLeftPanel++
+
+//                 } else if (i === numbers && storeCells[i-1]=="O"){
+//                     playerRightPanel++
+
+//                 }
+//             }
+//         }
+//         if (playerLeftPanel==requiredConditions){
+//             return true
+//         } else if (playerRightPanel==requiredConditions){
+//             return false;
+//         }
+//     }
+// }
+
+// const minimax = function(board, turn) {
+//     // get emply cell
+//     let moves = [];
+//     for (let cell of board){
+//         if(!cell.innerHTML==""){
+//             moves.push(cell.cellIndex);
+//         }
+//     }
+
+//     // check index score and fill-in
+//     let score = [];
+
+
+
+//     // check best move index
+//     let bestIndex = 0;
+//     if(turn%2 == 0){
+//         let  bestScore = -10000;
+//         for (let i =0; i<moves.length;i++){
+//             if(score[i] > bestScore){
+//                 bestScore = score[i];
+//                 bestIndex = moves[i];
+//             }
+//         }
+//     } else {
+//         let bestScore = 10000;
+//         for (let i =0; i<moves.length;i++){
+//             if(score[i] < bestScore){
+//                 bestScore = score[i];
+//                 bestIndex = moves[i];
+//             }
+//         }
+//     }
+
+//     return bestIndex
+// }
+
+// change the turn
 const playerTurn = function(){
     if (currentPlayer == "X"){
         currentPlayer = "O";
@@ -175,6 +253,25 @@ const playerTurn = function(){
     winningMessage.textContent = `${currentPlayerElement}'s turn`;
 };
 
+// fill in data to cells and bot click
+const dataToCell = function(cell,index){
+    // change current player and fill in cell
+    storeCells[index] = currentPlayer;
+    if(currentPlayer == "X"){
+        cell.appendChild(mage1token.cloneNode(true));
+    } else if (currentPlayer = "O"){
+        cell.appendChild(mage2token.cloneNode(true));
+    }
+    if(soundPlay){
+        cellsound.play()
+    }
+    // bot click after cell clicked
+    if(activateBot && currentPlayer == "X"){
+        botClick(botTurn())
+    }
+};
+
+// check winning condition and pass turn
 const checkWinner = function(){
     let gameEnd = false;
 
@@ -183,23 +280,15 @@ const checkWinner = function(){
         const requiredConditions = winConditionsArray[condition].length
         let playerLeftPanel = 0;
         let playerRightPanel =0;
-        // console.log(requiredConditions)
-        // console.log(playerLeftPanel)
-        // console.log(playerRightPanel)
+ 
         for (let numbers of winConditionsArray[condition]){
             for (let i =1; i<=storeCells.length;i++){
                 if(i === numbers && storeCells[i-1]=="X"){
-                    // console.log(i)
-                    // console.log(numbers)
-                    // console.log(storeCells[i])
                     playerLeftPanel++
-                    // console.log(playerLeftPanel)
+
                 } else if (i === numbers && storeCells[i-1]=="O"){
-                    // console.log(i)
-                    // console.log(numbers)
-                    // console.log(storeCells[i])
                     playerRightPanel++
-                    // console.log(playerRightPanel)
+
                 }
             }
         }
@@ -234,6 +323,7 @@ const checkWinner = function(){
     }
 };
 
+// restart game
 const restartGame = function(){
     currentPlayer = "X";
     storeCells = ["", "", "", "", "", "", "", "", ""];
@@ -242,12 +332,11 @@ const restartGame = function(){
     winningMessage.textContent = `${currentPlayerElement}'s turn`;
     cells.forEach(function(cell){
         cell.textContent = "";
-        // cell.removeChild(mage1token);
-        // cell.removeChild(mage2token);
     });
     gameStart = true;
 };
 
+// when cell is clicked
 const cellClicked = function(){
     const index = this.getAttribute("cellIndex");
     if(storeCells[index] != "" || !gameStart){
@@ -258,6 +347,7 @@ const cellClicked = function(){
     checkWinner();
 };
 
+// For background change together with element change
 const elementSetup = function(left,right){
     // check background as per elements
     const checkLeftRight = [];
@@ -287,11 +377,9 @@ const elementSetup = function(left,right){
             document.querySelector(".mage2token").src = tokens[i-1]
         }
     }
-    
 }
 
 // for character change buttons
-
 const characterIncrease1 = function(){
     if(turnCount==0){
         characterLeft++
@@ -308,7 +396,6 @@ const characterIncrease1 = function(){
     }
     console.log(characterLeft)
 }
-
 const characterIncrease2 = function(){
     if(turnCount==0){
         characterRight++
@@ -341,7 +428,6 @@ const characterDecrease1 = function(){
     }
     console.log(characterLeft)
 }
-
 const characterDecrease2 = function(){
     if(turnCount==0){
         characterRight--
@@ -359,20 +445,40 @@ const characterDecrease2 = function(){
     console.log(characterRight)
 }
 
+// sound buttons
 const soundOff = function(){
     soundPlay = false;
 }
-
 const soundOn = function(){
     soundPlay = true;
 }
 
+// bot buttons
+const botactivate = function(){
+    if(turnCount==0){
+        activateBot = true;
+        document.querySelector("#bots").src = "images/icons/deactivatebot.png";
+        document.querySelector(".bots").onclick = botdeactivate;
+        mage2name.textContent = character2Element + " (bot)";
+    }
+}
+const botdeactivate = function(){
+    if(turnCount==0){
+        activateBot = false;
+        document.querySelector("#bots").src = "images/icons/activatebot.png";
+        document.querySelector(".bots").onclick = botactivate;
+        mage2name.textContent = character2Element;
+    }
+}
+
+// add sound to every buttons
 const buttonSound = function(){
     if(soundPlay){
         buttonsound.play()
     }
 }
 
+// start game
 const startGame = function(){
     // set default element
     elementSetup(characterLeft,characterRight)

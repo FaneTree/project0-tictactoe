@@ -97,8 +97,8 @@
 
 .option {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    grid-template-rows: repeat(2,1fr);
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(3,1fr);
     justify-items: center;
     align-items: center;
 }
@@ -115,10 +115,14 @@
     font-size: 20px;
 }
 
+.setBots{
+    grid-column: 1/2;
+}
+
 .sound {
-    grid-column: 1/3;
+    grid-column: 2/4;
 }
 
 .setgameplay {
-    grid-column: 1/5;
+    grid-column: 1/4;
 }
