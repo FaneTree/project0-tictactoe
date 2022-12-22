@@ -11,16 +11,74 @@ Elemental theme as Tic Tac Toe game with 4 elements including fire, wind, water,
 
 ### **How to play game**
 You can play tic tac toe game through [here](https://tanakorntree.github.io/Project1-tictactoe/).
-The game include features to change board size together with connect 4 by using the buttons on bottom left.
+The game includes features to change board size together with connect 4 by using the buttons on bottom left.
 
+### **Snapshots**
+- Start game
+![Start game](./images/screenshot/Start.png)
+- Bot
+![Bot](./images/screenshot/Bot.png)
+- Connect 4
+![Connect4](./images/screenshot/connect4.png)
 ---
 ### **Putting it all together**
 
 1. **Features**
     - Ability to change board size from 3x3 to 5x5 and also connect 4 game.
+    ![changeGame](./images/screenshot/buttons.png)
+
     - The bot using random method.
+    ```JavaScript
+        const botTurn = function(){
+        // get emply cell
+        let moves = [];
+        let i = 0;
+        let cells  = document.querySelectorAll(".cell")
+        for (let cell of cells){
+            if(cell.innerHTML==""){
+                moves[i] = cell.getAttribute("cellIndex");
+                i++
+            }
+        }
+        let move = moves[Math.floor(Math.random()*moves.length)];
+        return move;
+        }
+    ```
+
     - Background change as per matching element.
     - The change in element together with token representing X and O.
+    ```JavaScript
+        const elementSetup = function(left,right){
+            // check background as per elements
+            const checkLeftRight = [];
+            checkLeftRight.push(left, right);
+            for(let i=0;i<backgroundIndex.length;i++){
+                if(checkLeftRight.sort().join()==backgroundIndex[i].join()){
+                    document.querySelector('.main-content').style.backgroundImage = `url(${backgrounds[i]})`
+                }
+            }
+            // add element into the page
+            for (let i =1; i<=4;i++){
+                if(left==i){
+                    // change description
+                    mage1name.textContent = elements[i-1]
+                    character1Element = mage1name.textContent
+                    // change character and token
+                    document.querySelector(".mage1").src = characters[i-1]
+                    document.querySelector(".mage1token").src = tokens[i-1]
+                    winningMessage.textContent = `${character1Element}'s turn`
+                }
+                if(right==i){
+                    // change description
+                    mage2name.textContent = elements[i-1]
+                    character2Element = mage2name.textContent
+                    // change character and token
+                    document.querySelector(".mage2").src = characters[i-1]
+                    document.querySelector(".mage2token").src = tokens[i-1]
+                }
+            }
+        }
+    ```
 
 2. **Challenges**
     - The design change during the creation process.
@@ -43,6 +101,8 @@ The game include features to change board size together with connect 4 by using 
 
     - transition for connect 4 to make token drop from top to the position.
 
+    - add timer into the game.
+
     - improve the code in buttons and referencing after recreate the cells
 
 4. **Lessons**
@@ -52,7 +112,7 @@ The game include features to change board size together with connect 4 by using 
 
 ---
 #### **Plan by steps in first version**
-
+![firstPlan](./images/screenshot/Plan.png)
 1. **html elements for 3x3 as skeleton**
 2. **Add basic css for 3x3**
 3. **Add Javascript together with html and css**
