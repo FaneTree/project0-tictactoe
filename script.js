@@ -7,40 +7,46 @@ const board = document.querySelector(".board")
 
 const winningConditions = {
     "3x3": {
-        row1: [1, 2, 3],
-        row2: [4, 5, 6],
-        row3: [7, 8, 9],
-        col1: [1, 4, 7],
-        col2: [2, 5, 8],
-        col3: [3, 6, 9],
-        diag1: [1, 5, 9],
-        diag2: [3, 5, 7],
+        Condition: {
+            row1: [1, 2, 3],
+            row2: [4, 5, 6],
+            row3: [7, 8, 9],
+            col1: [1, 4, 7],
+            col2: [2, 5, 8],
+            col3: [3, 6, 9],
+            diag1: [1, 5, 9],
+            diag2: [3, 5, 7],
+        }
     },
     "4x4": {
-        row1: [1, 2, 3, 4],
-        row2: [5, 6, 7, 8],
-        row3: [9, 10, 11, 12],
-        row4: [13, 14, 15, 16],
-        col1: [1, 5, 9, 13],
-        col2: [2, 6, 10, 14],
-        col3: [3, 7, 11, 15],
-        col4: [4, 8, 12, 16],
-        diag1: [1, 6, 11, 16],
-        diag2: [4, 7, 10, 13],
+        Condition: {
+            row1: [1, 2, 3, 4],
+            row2: [5, 6, 7, 8],
+            row3: [9, 10, 11, 12],
+            row4: [13, 14, 15, 16],
+            col1: [1, 5, 9, 13],
+            col2: [2, 6, 10, 14],
+            col3: [3, 7, 11, 15],
+            col4: [4, 8, 12, 16],
+            diag1: [1, 6, 11, 16],
+            diag2: [4, 7, 10, 13],
+        }
     },
     "5x5": {
-        row1: [1, 2, 3, 4, 5],
-        row2: [6, 7, 8, 9, 10],
-        row3: [11, 12, 13, 14, 15],
-        row4: [16, 17, 18, 19, 20],
-        row5: [21, 22, 23, 24, 25],
-        col1: [1, 6, 11, 16, 21],
-        col2: [2, 7, 12, 17, 22],
-        col3: [3, 8, 13, 18, 23],
-        col4: [4, 9, 14, 19, 24],
-        col5: [5, 10, 15, 20, 25],
-        diag1: [1, 7, 13, 19, 25],
-        diag2: [5, 9, 13, 17, 21],
+        Condition: {
+            row1: [1, 2, 3, 4, 5],
+            row2: [6, 7, 8, 9, 10],
+            row3: [11, 12, 13, 14, 15],
+            row4: [16, 17, 18, 19, 20],
+            row5: [21, 22, 23, 24, 25],
+            col1: [1, 6, 11, 16, 21],
+            col2: [2, 7, 12, 17, 22],
+            col3: [3, 8, 13, 18, 23],
+            col4: [4, 9, 14, 19, 24],
+            col5: [5, 10, 15, 20, 25],
+            diag1: [1, 7, 13, 19, 25],
+            diag2: [5, 9, 13, 17, 21],
+        }
     },
     "Connect4": {
         Condition: {
@@ -74,13 +80,13 @@ const winningConditions = {
             diag8: [22, 18, 14, 10]
         },
 
-        insert: {
-            line1: [1, 6, 11, 16, 21],
-            line2: [2, 7, 12, 17, 22],
-            line3: [3, 8, 13, 18, 23],
-            line4: [4, 9, 14, 19, 24],
-            line5: [5, 10, 15, 20, 25]
-        }
+        insert: [
+            [1, 6, 11, 16, 21],
+            [2, 7, 12, 17, 22],
+            [3, 8, 13, 18, 23],
+            [4, 9, 14, 19, 24],
+            [5, 10, 15, 20, 25]
+        ]
     }
 };
 
@@ -284,7 +290,7 @@ const dataToCell = function(cell,index){
 const checkWinner = function(){
     let gameEnd = false;
 
-    const winConditionsArray = winningConditions[currentBoard];
+    const winConditionsArray = winningConditions[currentBoard].Condition;
     for (let condition in winConditionsArray){
         const requiredConditions = winConditionsArray[condition].length
         let playerLeftPanel = 0;
@@ -348,13 +354,46 @@ const restartGame = function(){
     gameStart = true;
 };
 
+// connect 4 fill-in
+
+const connect4Fill = function(index){
+    let cellToChoose;
+    let winConditionsInserts = winningConditions[currentBoard].insert;
+    console.log(winConditionsInserts)
+    for (let insert of winConditionsInserts){
+        // console.log(insert);
+        // console.log(index+1);
+        // console.log(insert.includes(index+1));
+        if(insert.includes(index+1)){
+            for(let i=insert.length-1;i>=0;i--){
+                let cells  = document.querySelectorAll(".cell");
+                for (let cell of cells){
+                    let cellIndex = cell.getAttribute("cellIndex");
+                    // console.log(cellIndex)
+                    // console.log(storeCells[cellIndex])
+                    // console.log(insert[i]-1)
+                    if (cellIndex == (insert[i]-1) && storeCells[cellIndex] == ""){
+                        cellToChoose = cell;
+                        console.log(cell);
+                        return dataToCell(cell, (insert[i]-1));
+                    }
+                }
+            }
+        }
+    }
+}
+
 // when cell is clicked
 const cellClicked = function(){
-    const index = this.getAttribute("cellIndex");
+    const index = parseInt(this.getAttribute("cellIndex"));
     if(storeCells[index] != "" || !gameStart){
         return;
     }
-    dataToCell(this, index);
+    if(currentBoard=="Connect4"){
+        connect4Fill(index);
+    } else {
+        dataToCell(this, index);
+    }
     turnCount++; // count turn
     checkWinner();
 };
@@ -519,9 +558,11 @@ const gridCheck = function(){
     } else if (lineSize==4){
         currentBoard = "4x4";
         board.style.gridTemplateColumns = "repeat(4, auto)"
-    } else if (lineSize==5){
+    } else if (lineSize==5 && currentBoard!=="Connect4"){
         currentBoard = "5x5";
         board.style.gridTemplateColumns = "repeat(5, auto)"
+    } else {
+        board.style.gridTemplateColumns = "repeat(5, auto)" // Connect4
     }
 }
 
@@ -529,6 +570,7 @@ const gridCheck = function(){
 
 const gridConnect4 = function(){
     if(turnCount==0){
+        currentBoard = "Connect4";
         lineSize = 5;
         gridCheck();
     }
