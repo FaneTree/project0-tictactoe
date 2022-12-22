@@ -63,7 +63,7 @@ body {
     margin-top: 10px;
 }
 
-.cell{
+.cell {
     display: flex;
     justify-content: center;
 	align-items: center;
@@ -72,11 +72,9 @@ body {
     background-color: #36454F;
     width: 120px;
     height: 120px;
-    /* width: 75px;
-    height: 75px; */
-    border: 2px solid #DAA520;
-    box-shadow: 0 0 0 2px;
     line-height: 120px;
+    border: 2px solid #DAA520;
+    box-shadow: 0 0 0 2px; 
     font-size: 50px;
     cursor: pointer;
     color: #36454F;

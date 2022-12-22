@@ -3,6 +3,7 @@ const cells = document.querySelectorAll(".cell");
 const winningMessage = document.querySelector(".winningMessage");
 const restartBtn = document.querySelectorAll("#reset");
 const buttonsClick = document.querySelectorAll(".button");
+const board = document.querySelector(".board")
 
 const winningConditions = {
     "3x3": {
@@ -131,12 +132,13 @@ let gameStart = false;
 let turnCount = 0;
 let player1Score = 0;
 let player2Score = 0;
+let cellSize = "120px";
+let tokenSize = "100px";
 let character1Element = elements[2];
 let character2Element = elements[3];
 let currentPlayerElement = character1Element;
 let characterLeft = 3;
 let characterRight = 4;
-let moves = [];
 
 // define bot
 let activateBot = false;
@@ -156,20 +158,23 @@ const buttonsound = new Audio('http://commondatastorage.googleapis.com/codeskulp
 
 const botTurn = function(){
     // get emply cell
-    moves = [];
+    let moves = [];
     let i = 0;
+    let cells  = document.querySelectorAll(".cell")
     for (let cell of cells){
         if(cell.innerHTML==""){
             moves[i] = cell.getAttribute("cellIndex");
             i++
         }
     }
+    console.log(moves)
     let move = moves[Math.floor(Math.random()*moves.length)];
     return move;
 }
 
 const botClick = function(index){
     // bot to make its turn
+    let cells  = document.querySelectorAll(".cell")
     for (let cell of cells){
         if(index == cell.getAttribute("cellIndex")){
             setTimeout(function(){cell.click()},400);
@@ -258,9 +263,13 @@ const dataToCell = function(cell,index){
     // change current player and fill in cell
     storeCells[index] = currentPlayer;
     if(currentPlayer == "X"){
-        cell.appendChild(mage1token.cloneNode(true));
+        var stamp = mage1token.cloneNode(true);
+        stamp.style.width = tokenSize;
+        cell.appendChild(stamp);
     } else if (currentPlayer = "O"){
-        cell.appendChild(mage2token.cloneNode(true));
+        var stamp = mage2token.cloneNode(true);
+        stamp.style.width = tokenSize;
+        cell.appendChild(stamp);
     }
     if(soundPlay){
         cellsound.play()
@@ -326,11 +335,14 @@ const checkWinner = function(){
 // restart game
 const restartGame = function(){
     currentPlayer = "X";
-    storeCells = ["", "", "", "", "", "", "", "", ""];
+    storeCells = [];
+    for (let i = 0; i<lineSize**2;i++){
+        storeCells[i] = "";
+    }
     currentPlayerElement = character1Element;
     turnCount = 0;
     winningMessage.textContent = `${currentPlayerElement}'s turn`;
-    cells.forEach(function(cell){
+    document.querySelectorAll(".cell").forEach(function(cell){
         cell.textContent = "";
     });
     gameStart = true;
@@ -471,6 +483,73 @@ const botdeactivate = function(){
     }
 }
 
+const gridCheck = function(){
+    // clear div inside board and change storeCells size
+    board.innerHTML = "";
+    storeCells = [];
+
+    // update storeCells and div inside board
+    for (let i = 0; i<lineSize**2;i++){
+        storeCells[i] = "";
+        var new_row = document.createElement('div');
+        new_row.setAttribute('cellIndex',i);
+        new_row.classList.add('cell');
+
+        if (lineSize == 3){
+            cellSize = "120px";
+            tokenSize = "100px";
+        } else if (lineSize == 4){
+            cellSize = "90px";
+            tokenSize = "80px";
+        } else if (lineSize == 5){
+            cellSize = "75px";
+            tokenSize = "65px";
+        }
+        new_row.style.width = cellSize;
+        new_row.style.height = cellSize;
+        new_row.style.lineHeight = cellSize;
+        new_row.addEventListener("click", cellClicked)
+        board.appendChild(new_row);
+    }
+
+    // change parameters
+    if(lineSize==3){
+        currentBoard = "3x3";
+        board.style.gridTemplateColumns = "repeat(3, auto)"
+    } else if (lineSize==4){
+        currentBoard = "4x4";
+        board.style.gridTemplateColumns = "repeat(4, auto)"
+    } else if (lineSize==5){
+        currentBoard = "5x5";
+        board.style.gridTemplateColumns = "repeat(5, auto)"
+    }
+}
+
+// grid add/reduce/connect4
+
+const gridConnect4 = function(){
+    if(turnCount==0){
+        lineSize = 5;
+        gridCheck();
+    }
+}
+const gridAdd = function(){
+    if(turnCount==0){
+        if(lineSize<5){
+            lineSize++
+            gridCheck();
+        }
+    }
+}
+const gridReduce = function(){
+    if(turnCount==0){
+        if(lineSize>3){
+            lineSize--;
+            gridCheck();
+        }
+    }
+}
+
 // add sound to every buttons
 const buttonSound = function(){
     if(soundPlay){
@@ -481,7 +560,7 @@ const buttonSound = function(){
 // start game
 const startGame = function(){
     // set default element
-    elementSetup(characterLeft,characterRight)
+    elementSetup(characterLeft,characterRight);
     // Add EventListener to every cells
     cells.forEach(function(cell){
         cell.addEventListener("click", cellClicked);
