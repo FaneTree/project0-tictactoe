@@ -10,7 +10,7 @@ Elemental theme as Tic Tac Toe game with 4 elements including fire, wind, water,
 ---
 
 ### **How to play game**
-You can play tic tac toe game through [here](https://tanakorntree.github.io/Project1-tictactoe/).
+You can play tic tac toe game through [here](https://tanakorntree.github.io/project0-tictactoe/).
 The game includes features to change board size together with connect 4 by using the buttons on bottom left.
 
 ### **Snapshots**
